@@ -38,36 +38,38 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         # this function updates the position of the player sprite 
         # only allows the player to move in the horizontal axis 
-
+        # uses self as parameter for player object 
         self.rect.x += GameState.vector * self.travel
-        if self.rect.x < 0:
+        if self.rect.x < 0: # forces boundary on player sprite 
             self.rect.x = 0
-        elif self.rect.x > RES[0] - self.size[0]:
+        elif self.rect.x > RES[0] - self.size[0]:   # moves player to desired place
             self.rect.x = RES[0] - self.size[0]
 
 
 class Alien(pygame.sprite.Sprite):
     # class designed to seprate code between player and alien 
     # used to modularize code 
-    # takes pygame.sprite.Sprite to use graphic that will move on the users screen
+    # takes pygame.sprite.Sprite which allows a graphic item to move on screen
     def __init__(self):
         # create assoicated variables to the Alien Sprite
-        
+        # takes self as parameter for alien objects
         pygame.sprite.Sprite.__init__(self)
         self.size = (ALIEN_SIZE)
         self.rect = self.image.get_rect()
         self.has_moved = [0, 0]
         self.vector = [1, 1]  # uses array for position 
-        self.travel = [(ALIEN_SIZE[0] - 7), ALIEN_SPACER]
+        self.travel = [(ALIEN_SIZE[0] - 7), ALIEN_SPACER] #find amount traveled on screen
         self.speed = 700
         self.time = pygame.time.get_ticks()
 
     def update(self):
+        # updates alien sprite position based upon alien object speed 
+        # self parameter for alien object 
         if GameState.alien_time - self.time > self.speed:
             if self.has_moved[0] < 12:
                 self.rect.x += self.vector[0] * self.travel[0]
                 self.has_moved[0] += 1
-            else:
+            else:                               # moves alien object at a certain speed
                 if not self.has_moved[1]:
                     self.rect.y += self.vector[1] * self.travel[1]
                 self.vector[0] *= -1
@@ -79,22 +81,29 @@ class Alien(pygame.sprite.Sprite):
 
 
 class Ammo(pygame.sprite.Sprite):
+    # class for ammo which can be used by both alien or player object 
+    # this is because the parameter taken by the class is any graphic of pygame.sprite.Sprite object 
     def __init__(self, color, (width, height)):
-        pygame.sprite.Sprite.__init__(self)
+        # set ammo object bullet properties 
+        # the properties are the parameters allowed (ie color,width, height)
+        pygame.sprite.Sprite.__init__(self)   # create graphic
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
         self.rect = self.image.get_rect()
-        self.speed = 0
+        self.speed = 0          
         self.vector = 0
 
     def update(self):
+        # update position of ammo object interms of y position 
         self.rect.y += self.vector * self.speed
-        if self.rect.y < 0 or self.rect.y > RES[1]:
+        if self.rect.y < 0 or self.rect.y > RES[1]: # if an object is hit then count as a hit 
             self.kill()
 
 
 class Block(pygame.sprite.Sprite):
+    # class for blocks that spawn over player 
     def __init__(self, color, (width, height)):
+        # when creating a box the color, width, and height can be choosen
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
@@ -102,7 +111,8 @@ class Block(pygame.sprite.Sprite):
 
 
 class GameState:
-    pass
+    # class created but no methods to implement  
+    pass # acts as placeholder
 
 
 class Game(object):
