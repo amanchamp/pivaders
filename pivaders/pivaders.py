@@ -1,7 +1,10 @@
+"""pivaders is a space invaders clone written in Python and Py game for the Raspberry Pi.
+This project was by Russell Barnes for Linux User $ Developer magazine issue (v.01)."""
+
 #!/usr/bin/env python2
 
 import pygame, random
-
+# variables are being set with color or resolution/pixel size
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
@@ -17,17 +20,25 @@ RES = (800, 600)
 
 
 class Player(pygame.sprite.Sprite):
+    # class designed to separate code from the board and player 
+    # aids in modularization of the program 
+    # takes pygame.sprite.Sprite which is a graphic that can be moved (ie picture of spaceship) 
     def __init__(self):
+        # initializing the game and adding various attributes to the visual board 
+        # self is a class instance and refers to the object using this function
         pygame.sprite.Sprite.__init__(self)
         self.size = (64, 61)
         self.rect = self.image.get_rect()
-        self.rect.x = (RES[0] / 2) - (self.size[0] / 2)
+        self.rect.x = (RES[0] / 2) - (self.size[0] / 2) # allows size to be dynamic and not hard coded 
         self.rect.y = 520
         self.travel = 7
         self.speed = 350
-        self.time = pygame.time.get_ticks()
+        self.time = pygame.time.get_ticks() # more efficent then using epoch time
 
     def update(self):
+        # this function updates the position of the player sprite 
+        # only allows the player to move in the horizontal axis 
+
         self.rect.x += GameState.vector * self.travel
         if self.rect.x < 0:
             self.rect.x = 0
@@ -36,12 +47,17 @@ class Player(pygame.sprite.Sprite):
 
 
 class Alien(pygame.sprite.Sprite):
+    # class designed to seprate code between player and alien 
+    # used to modularize code 
+    # takes pygame.sprite.Sprite to use graphic that will move on the users screen
     def __init__(self):
+        # create assoicated variables to the Alien Sprite
+        
         pygame.sprite.Sprite.__init__(self)
         self.size = (ALIEN_SIZE)
         self.rect = self.image.get_rect()
         self.has_moved = [0, 0]
-        self.vector = [1, 1]
+        self.vector = [1, 1]  # uses array for position 
         self.travel = [(ALIEN_SIZE[0] - 7), ALIEN_SPACER]
         self.speed = 700
         self.time = pygame.time.get_ticks()
@@ -370,6 +386,7 @@ class Game(object):
         self.level_up += 50
 
     def calc_collisions(self):
+        # self is an object 
         pygame.sprite.groupcollide(
             self.missile_group, self.barrier_group, True, True)
         pygame.sprite.groupcollide(
